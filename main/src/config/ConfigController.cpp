@@ -34,77 +34,6 @@ namespace Config
 		// checkSetupCompleted();
 	}
 
-	void getMotorPins(MotorPins * pins[])
-	{
-		preferences.begin(prefNamespace, false);
-		pins[Stepper::A] = new MotorPins();
-		if (preferences.getBytesLength(keyMotorADirPin) > 0)
-		{
-			preferences.getBytes(keyMotorADirPin, pins[Stepper::A], sizeof(MotorPins));
-			log_i("get stepper a");
-		}
-		pins[Stepper::X] = new MotorPins();
-		if (preferences.getBytesLength(keyMotorXDirPin) > 0)
-		{
-			preferences.getBytes(keyMotorXDirPin, pins[Stepper::X], sizeof(MotorPins));
-			log_i("get stepper x");
-		}
-		pins[Stepper::Y] = new MotorPins();
-		if (preferences.getBytesLength(keyMotorYDirPin) > 0)
-		{
-			preferences.getBytes(keyMotorYDirPin, pins[Stepper::Y], sizeof(MotorPins));
-			log_i("get stepper y");
-		}
-		pins[Stepper::Z] = new MotorPins();
-		if (preferences.getBytesLength(keyMotorZDirPin) > 0)
-		{
-			preferences.getBytes(keyMotorZDirPin, pins[Stepper::Z], sizeof(MotorPins));
-			log_i("get stepper z");
-		}
-		preferences.end();
-	}
-
-	void setMotorPinConfig(MotorPins * pins[])
-	{
-		preferences.begin(prefNamespace, false);
-		preferences.putBytes(keyMotorADirPin, pins[Stepper::A], sizeof(MotorPins));
-		preferences.putBytes(keyMotorXDirPin, pins[Stepper::X], sizeof(MotorPins));
-		preferences.putBytes(keyMotorYDirPin, pins[Stepper::Y], sizeof(MotorPins));
-		preferences.putBytes(keyMotorZDirPin, pins[Stepper::Z], sizeof(MotorPins));
-		preferences.end();
-	}
-
-
-	LedConfig *getLedPins()
-	{
-		preferences.begin(prefNamespace, false);
-		LedConfig *config = new LedConfig();
-		preferences.getBytes(keyLed, config, sizeof(LedConfig));
-		preferences.end();
-		return config;
-	}
-
-	void setLedPins(LedConfig *config)
-	{
-		preferences.begin(prefNamespace, false);
-		preferences.putBytes(keyLed, config, sizeof(LedConfig));
-		preferences.end();
-	}
-
-	void setAnalogJoyStickPins(JoystickPins * pins)
-	{
-		preferences.begin(prefNamespace, false);
-		preferences.putBytes(key_joy, pins, sizeof(JoystickPins));
-		preferences.end();
-	}
-
-    void getAnalogJoyStickPins(JoystickPins * pins)
-	{
-		preferences.begin(prefNamespace, false);
-		preferences.getBytes(key_joy, pins, sizeof(JoystickPins));
-		preferences.end();
-	}
-
 	bool isFirstRun()
 	{
 		bool rdystate = preferences.begin(prefNamespace, false);
@@ -142,23 +71,6 @@ namespace Config
 		log_i("resetPreferences");
 		preferences.clear();
 		return true;
-	}
-
-	void setModuleConfig(ModuleConfig *pins)
-	{
-		preferences.begin(prefNamespace, false);
-		size_t s = preferences.putBytes("module", pins, sizeof(ModuleConfig));
-		log_i("setModuleConfig size:%i", s);
-		preferences.end();
-	}
-	ModuleConfig *getModuleConfig()
-	{
-		preferences.begin(prefNamespace, true);
-		ModuleConfig *pin = new ModuleConfig();
-		size_t s = preferences.getBytes("module", pin, sizeof(ModuleConfig));
-		log_i("getModuleConfig size:%i", s);
-		preferences.end();
-		return pin;
 	}
 
 	void setPsxMac(String mac)

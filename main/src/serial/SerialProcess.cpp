@@ -57,8 +57,6 @@ void SerialProcess::serialize(int success)
 
 void SerialProcess::jsonProcessor(String task, JsonObject jsonDocument)
 {
-	if (task == modules_set_endpoint)
-		serialize(moduleController.set(jsonDocument));
 	if (task == modules_get_endpoint)
 		serialize(moduleController.get());
 	/*
@@ -69,10 +67,6 @@ void SerialProcess::jsonProcessor(String task, JsonObject jsonDocument)
 		if (task == motor_act_endpoint)
 		{
 			serialize(moduleController.get(AvailableModules::motor)->act(jsonDocument));
-		}
-		if (task == motor_set_endpoint)
-		{
-			serialize(moduleController.get(AvailableModules::motor)->set(jsonDocument));
 		}
 		if (task == motor_get_endpoint)
 		{
@@ -86,16 +80,12 @@ void SerialProcess::jsonProcessor(String task, JsonObject jsonDocument)
 	{
 		if (task == ledarr_act_endpoint)
 			serialize(moduleController.get(AvailableModules::led)->act(jsonDocument));
-		if (task == ledarr_set_endpoint)
-			serialize(moduleController.get(AvailableModules::led)->set(jsonDocument));
 		if (task == ledarr_get_endpoint)
 			serialize(moduleController.get(AvailableModules::led)->get(jsonDocument));
 	}
 
 	if (moduleController.get(AvailableModules::analogJoystick) != nullptr)
 	{
-		if (task == analog_joystick_set_endpoint)
-			serialize(moduleController.get(AvailableModules::analogJoystick)->set(jsonDocument));
 		if (task == analog_joystick_get_endpoint)
 			serialize(moduleController.get(AvailableModules::analogJoystick)->get(jsonDocument));
 	}

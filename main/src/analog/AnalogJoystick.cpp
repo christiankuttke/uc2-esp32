@@ -2,10 +2,6 @@
 
 namespace RestApi
 {
-    void AnalogJoystick_set()
-    {
-        serialize(moduleController.get(AvailableModules::analogJoystick)->set(deserialize()));
-    }
     void AnalogJoystick_get()
     {
         serialize(moduleController.get(AvailableModules::analogJoystick)->get(deserialize()));
@@ -16,31 +12,15 @@ AnalogJoystick::AnalogJoystick(/* args */){};
 AnalogJoystick::~AnalogJoystick(){};
 void AnalogJoystick::setup()
 {
-    pins =new JoystickPins();
-    Config::getAnalogJoyStickPins(pins);
-    pinMode(pins->x_pin, INPUT);
-    pinMode(pins->y_pin, INPUT);
+    pinMode(pinConfig.ANLOG_JOYSTICK_X, INPUT);
+    pinMode(pinConfig.ANLOG_JOYSTICK_Y, INPUT);
 }
 int AnalogJoystick::act(DynamicJsonDocument jsonDocument) { return 1;}
 
-int AnalogJoystick::set(DynamicJsonDocument doc) {
-	if (doc.containsKey(key_joy))
-    {
-        if((doc)[key_joy].containsKey(key_joiypinX))
-            pins->x_pin = (doc)[key_joy][key_joiypinX];
-        if((doc)[key_joy].containsKey(key_joiypinY))
-            pins->y_pin = (doc)[key_joy][key_joiypinY];
-    }
-    doc.clear();
-    Config::setAnalogJoyStickPins(pins);
-    setup();
-    return 1;
-}
-
 DynamicJsonDocument AnalogJoystick::get(DynamicJsonDocument  doc) {
     doc.clear();
-    doc[key_joy][key_joiypinX] = pins->x_pin;
-    doc[key_joy][key_joiypinY] = pins->y_pin;
+    doc[key_joy][key_joiypinX] = pinConfig.ANLOG_JOYSTICK_X;
+    doc[key_joy][key_joiypinY] = pinConfig.ANLOG_JOYSTICK_Y;
     return doc;
 }
 
@@ -51,9 +31,9 @@ void AnalogJoystick::loop()
     if (moduleController.get(AvailableModules::motor) != nullptr)
     {
         FocusMotor *motor = (FocusMotor *)moduleController.get(AvailableModules::motor);
-        if (pins->x_pin > 0)
+        if (pinConfig.ANLOG_JOYSTICK_X > 0)
         {
-            int x = analogRead(pins->x_pin) - 4096 / 2;
+            int x = analogRead(pinConfig.ANLOG_JOYSTICK_X) - 4096 / 2;
             if (x >= 200 || x <= -200)
             {
                 motor->data[Stepper::X]->speed = x;
@@ -71,9 +51,9 @@ void AnalogJoystick::loop()
                 joystick_drive_X = false;
             }
         }
-        if (pins->y_pin > 0)
+        if (pinConfig.ANLOG_JOYSTICK_Y > 0)
         {
-            int y = analogRead(pins->y_pin) - 4096 / 2;
+            int y = analogRead(pinConfig.ANLOG_JOYSTICK_Y) - 4096 / 2;
             if (y >= 200 || y <= -200)
             {
                 motor->data[Stepper::Y]->speed = y;

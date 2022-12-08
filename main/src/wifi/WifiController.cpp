@@ -276,30 +276,25 @@ namespace WifiController
 		server->on(bt_paireddevices_endpoint, HTTP_GET, RestApi::Bt_getPairedDevices);
 
 		server->on(modules_get_endpoint, HTTP_GET, RestApi::getModules);
-		server->on(modules_set_endpoint, HTTP_POST, RestApi::setModules);
 
 		// POST
-		if (moduleController.moduleConfig->motor != 0)
+		if (pinConfig.MOTOR_ENABLE > 0)
 		{
 			log_i("add motor endpoints");
 			server->on(motor_act_endpoint, HTTP_POST, RestApi::FocusMotor_act);
 			server->on(motor_get_endpoint, HTTP_GET, RestApi::FocusMotor_get);
-			server->on(motor_set_endpoint, HTTP_POST, RestApi::FocusMotor_set);
-			server->on(motor_setcalibration_endpoint,HTTP_POST, RestApi::FocusMotor_setCalibration);
 		}
 
-		if (moduleController.moduleConfig->led != 0)
+		if (pinConfig.LED_PIN > 0)
 		{
 			log_i("add led endpoints");
 			server->on(ledarr_act_endpoint, HTTP_POST, RestApi::Led_act);
 			server->on(ledarr_get_endpoint, HTTP_GET, RestApi::Led_get);
-			server->on(ledarr_set_endpoint, HTTP_POST, RestApi::Led_set);
 		}
 
-		if (moduleController.moduleConfig->analogJoystick != 0)
+		if (pinConfig.ANLOG_JOYSTICK_X > 0 || pinConfig.ANLOG_JOYSTICK_Y >0)
 		{
 			log_i("add analog joystick endpoints");
-			server->on(analog_joystick_set_endpoint, HTTP_POST, RestApi::AnalogJoystick_set);
 			server->on(analog_joystick_get_endpoint, HTTP_POST, RestApi::AnalogJoystick_get);
 		}
 		log_i("Setting up HTTP Routing END");

@@ -6,38 +6,29 @@ namespace RestApi
     {
         serialize(moduleController.get());
     }
-    void setModules()
-    {
-        serialize(moduleController.set(deserialize()));
-    }
 };
 
 void ModuleController::setup()
 {
-
-    // moduleConfig.led = true;
-    // moduleConfig.motor = true;
     for (auto &x : modules)
     {
         if (x.second != nullptr)
         {
             delete x.second;
-            //x.second = nullptr;
         }
     }
     modules.clear();
-    moduleConfig = Config::getModuleConfig();
-    if (moduleConfig->led)
+    if (pinConfig.LED_PIN > 0)
     {
         modules.insert(std::make_pair(AvailableModules::led, dynamic_cast<Module *>(new LedController())));
         log_i("add led");
     }
-    if (moduleConfig->motor)
+    if (pinConfig.MOTOR_ENABLE > 0)
     {
         modules.insert(std::make_pair(AvailableModules::motor, dynamic_cast<Module *>(new FocusMotor())));
         log_i("add motor");
     }
-    if (moduleConfig->analogJoystick)
+    if (pinConfig.ANLOG_JOYSTICK_X > 0 || pinConfig.ANLOG_JOYSTICK_Y > 0)
     {
         modules.insert(std::make_pair(AvailableModules::analogJoystick, dynamic_cast<Module *>(new AnalogJoystick())));
         log_i("add scanner");
@@ -69,27 +60,10 @@ Module *ModuleController::get(AvailableModules mod)
 DynamicJsonDocument ModuleController::get()
 {
     DynamicJsonDocument doc(4096);
-    doc[key_modules][keyLed] = moduleConfig->led;
-    doc[key_modules][key_motor] = moduleConfig->motor;
-    doc[key_modules][key_joy] = moduleConfig->analogJoystick;
+    doc[key_modules][keyLed] = pinConfig.LED_PIN > 0;
+    doc[key_modules][key_motor] = pinConfig.MOTOR_ENABLE > 0;
+    doc[key_modules][key_joy] = pinConfig.ANLOG_JOYSTICK_X > 0 || pinConfig.ANLOG_JOYSTICK_Y > 0;
     return doc;
-}
-
-int ModuleController::set(DynamicJsonDocument j)
-{
-    if (j.containsKey(key_modules))
-    {
-        if (j[key_modules].containsKey(keyLed))
-            moduleConfig->led = j[key_modules][keyLed];
-        if (j[key_modules].containsKey(key_motor))
-            moduleConfig->motor = j[key_modules][key_motor];
-        if (j[key_modules].containsKey(key_joy))
-            moduleConfig->analogJoystick = j[key_modules][key_joy];
-        Config::setModuleConfig(moduleConfig);
-        setup();
-        WifiController::restartWebServer();
-    }
-    return 1;
 }
 
 ModuleController moduleController;

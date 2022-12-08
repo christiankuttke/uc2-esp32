@@ -1,12 +1,10 @@
 #pragma once
 
 static const PROGMEM String motor_act_endpoint = "/motor_act";
-static const PROGMEM String motor_set_endpoint = "/motor_set";
 static const PROGMEM String motor_get_endpoint = "/motor_get";
 static const PROGMEM String motor_setcalibration_endpoint = "/motor_setcalibration";
 
 static const PROGMEM String ledarr_act_endpoint = "/ledarr_act";
-static const PROGMEM String ledarr_set_endpoint = "/ledarr_set";
 static const PROGMEM String ledarr_get_endpoint = "/ledarr_get";
 static const PROGMEM String features_endpoint = "/features_get";
 static const PROGMEM String identity_endpoint = "/identity";

@@ -4,13 +4,12 @@
 #include "../wifi/WifiController.h"
 #include "../config/ConfigController.h"
 #include "../../ModuleController.h"
-#include "MotorPins.h"
+#include "../../PinConfig.h"
 
 namespace RestApi
 {
 	void FocusMotor_act();
 	void FocusMotor_get();
-	void FocusMotor_set();
 	void FocusMotor_setCalibration();
 };
 
@@ -20,6 +19,7 @@ struct MotorData
 	long maxspeed = 200000;
 	long acceleration = 0;
 	long targetPosition = 0;
+	long currentPosition = 0;
 	bool isforever = false;
 	bool isaccelerated = false;
 	bool absolutePosition = false;
@@ -71,67 +71,8 @@ public:
 
 	std::array<AccelStepper *, 4> steppers;
 	std::array<MotorData *, 4> data;
-	// std::array<MotorPins *, 4> pins;
-	MotorPins *pins[4];
 
-	int setMinMaxRange(DynamicJsonDocument  ob);
 	int act(DynamicJsonDocument  ob) override;
-	int set(DynamicJsonDocument  ob) override;
-	/*
-		returns
-		{
-  "steppers": [
-	{
-	  "stepperid": 0,
-	  "dir": 0,
-	  "step": 0,
-	  "enable": 0,
-	  "dir_inverted": false,
-	  "step_inverted": false,
-	  "enable_inverted": false,
-	  "position": 0,
-	  "speed": 0,
-	  "speedmax": 20000
-	},
-	{
-	  "stepperid": 1,
-	  "dir": 21,
-	  "step": 19,
-	  "enable": 18,
-	  "dir_inverted": false,
-	  "step_inverted": false,
-	  "enable_inverted": true,
-	  "position": 0,
-	  "speed": 0,
-	  "speedmax": 20000
-	},
-	{
-	  "stepperid": 2,
-	  "dir": 0,
-	  "step": 0,
-	  "enable": 0,
-	  "dir_inverted": false,
-	  "step_inverted": false,
-	  "enable_inverted": false,
-	  "position": 0,
-	  "speed": 0,
-	  "speedmax": 20000
-	},
-	{
-	  "stepperid": 3,
-	  "dir": 0,
-	  "step": 0,
-	  "enable": 0,
-	  "dir_inverted": false,
-	  "step_inverted": false,
-	  "enable_inverted": false,
-	  "position": 0,
-	  "speed": 0,
-	  "speedmax": 20000
-	}
-  ]
-  }
-	*/
 	DynamicJsonDocument get(DynamicJsonDocument ob) override;
 	void setup() override;
 	void loop() override;	
@@ -142,15 +83,10 @@ public:
 private:
 	int logcount;
 	unsigned long nextSocketUpdateTime;
-	bool isShareEnable;
-
+	bool power_enable = false;
 	
 	void startAllDrives();
-	void applyMinPos(int i);
-	void applyMaxPos(int i);
 	void sendMotorPos(int i, int arraypos);
-	void resetMotorPos(int i);
-	bool shareEnablePin();
 	void disableEnablePin(int i);
 	void enableEnablePin(int i);
 };

@@ -105,13 +105,11 @@ namespace RestApi
         if (moduleController.get(AvailableModules::motor) != nullptr)
         {
             doc.add(motor_act_endpoint);
-            doc.add(motor_set_endpoint);
             doc.add(motor_get_endpoint);
         }
         if (moduleController.get(AvailableModules::led) != nullptr)
         {
             doc.add(ledarr_act_endpoint);
-            doc.add(ledarr_set_endpoint);
             doc.add(ledarr_get_endpoint);
         }
         serialize(doc);

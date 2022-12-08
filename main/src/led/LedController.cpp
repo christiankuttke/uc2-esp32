@@ -1,4 +1,3 @@
-#include "../../config.h"
 #include "LedController.h"
 
 namespace RestApi
@@ -13,11 +12,6 @@ namespace RestApi
 		serialize(moduleController.get(AvailableModules::led)->get(deserialize()));
 
 	}
-
-	void Led_set()
-	{
-		serialize(moduleController.get(AvailableModules::led)->set(deserialize()));
-	}
 }
 
 LedController::LedController() : Module() { log_i("ctor"); }
@@ -25,11 +19,10 @@ LedController::~LedController() { log_i("~ctor"); }
 
 void LedController::setup()
 {
-	ledconfig = Config::getLedPins();
 	// LED Matrix
-	matrix = new Adafruit_NeoPixel(ledconfig->ledCount, ledconfig->ledPin, NEO_GRB + NEO_KHZ800);
+	matrix = new Adafruit_NeoPixel(pinConfig.LED_COUNT, pinConfig.LED_PIN, NEO_GRB + NEO_KHZ800);
 	log_i("setup matrix is null:%s", matrix == nullptr);
-	log_i("LED_ARRAY_PIN: %i", ledconfig->ledPin);
+	log_i("LED_ARRAY_PIN: %i", pinConfig.LED_PIN);
 	matrix->begin();
 	matrix->setBrightness(255);
 	if (!isOn)
@@ -92,7 +85,7 @@ int LedController::act(DynamicJsonDocument ob)
 		else if (LEDArrMode == LedModes::left)
 		{
 			set_left(
-				ledconfig->ledCount,
+				pinConfig.LED_COUNT,
 				ob[keyLed][key_led_array][0][keyRed],
 				ob[keyLed][key_led_array][0][keyGreen],
 				ob[keyLed][key_led_array][0][keyBlue]);
@@ -101,7 +94,7 @@ int LedController::act(DynamicJsonDocument ob)
 		else if (LEDArrMode == LedModes::right)
 		{
 			set_right(
-				ledconfig->ledCount,
+				pinConfig.LED_COUNT,
 				ob[keyLed][key_led_array][0][keyRed],
 				ob[keyLed][key_led_array][0][keyGreen],
 				ob[keyLed][key_led_array][0][keyBlue]);
@@ -110,7 +103,7 @@ int LedController::act(DynamicJsonDocument ob)
 		else if (LEDArrMode == LedModes::top)
 		{
 			set_top(
-				ledconfig->ledCount,
+				pinConfig.LED_COUNT,
 				ob[keyLed][key_led_array][0][keyRed],
 				ob[keyLed][key_led_array][0][keyGreen],
 				ob[keyLed][key_led_array][0][keyBlue]);
@@ -119,7 +112,7 @@ int LedController::act(DynamicJsonDocument ob)
 		else if (LEDArrMode == LedModes::bottom)
 		{
 			set_bottom(
-				ledconfig->ledCount,
+				pinConfig.LED_COUNT,
 				ob[keyLed][key_led_array][0][keyRed],
 				ob[keyLed][key_led_array][0][keyGreen],
 				ob[keyLed][key_led_array][0][keyBlue]);
@@ -136,29 +129,12 @@ int LedController::act(DynamicJsonDocument ob)
 	return 1;
 }
 
-//{"led":{"LEDArrMode":1,"led_array":[{"id":0,"blue":"128","red":"128","green":"128"}]}}
-//{"task" : "/ledarr_act", "led":{"LEDArrMode":1,"led_array":[{"id":0,"blue":"0","red":"0","green":"0"}]}}
-int LedController::set(DynamicJsonDocument ob)
-{
-	if (ob.containsKey(keyLed))
-	{
-		if (ob[keyLed].containsKey(keyLEDPin))
-			ledconfig->ledPin = ob[keyLed][keyLEDPin];
-		if (ob[keyLed].containsKey(keyLEDCount))
-			ledconfig->ledCount = ob[keyLed][keyLEDCount];
-		log_i("led pin:%i count:%i", ledconfig->ledPin, ledconfig->ledCount);
-		Config::setLedPins(ledconfig);
-		setup();
-	}
-	return 1;
-}
-
 // Custom function accessible by the API
 DynamicJsonDocument LedController::get(DynamicJsonDocument ob)
 {
 	ob.clear();
-	ob[keyLEDCount] = ledconfig->ledCount;
-	ob[keyLEDPin] = ledconfig->ledPin;
+	ob[keyLEDCount] = pinConfig.LED_COUNT;
+	ob[keyLEDPin] = pinConfig.LED_PIN;
 	ob[keyLEDArrMode].add(0);
 	ob[keyLEDArrMode].add(1);
 	ob[keyLEDArrMode].add(2);
