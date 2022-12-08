@@ -8,12 +8,6 @@
 #include "../wifi/WifiController.h"
 #include "../bt/BtController.h"
 #include <esp_log.h>
-#include "../dac/DacController.h"
-#include "../analogin/AnalogInController.h"
-#include "../analogout/AnalogOutController.h"
-#include "../digitalout/DigitalOutController.h"
-#include "../digitalin/DigitalInController.h"
-#include "../laser/LaserController.h"
 namespace RestApi
 {
     /*

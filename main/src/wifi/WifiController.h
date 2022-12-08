@@ -6,14 +6,9 @@
 #include "RestApiCallbacks.h"
 #include "esp_log.h"
 #include "SPIFFS.h"
-#include "../analogin/AnalogInController.h"
-#include "../digitalout/DigitalOutController.h"
-#include "../digitalin/DigitalInController.h"
 #include "../config/ConfigController.h"
-#include "../dac/DacController.h"
-#include "../pid/PidController.h"
-#include "../laser/LaserController.h"
 #include "../led/LedController.h"
+#include "../analog/AnalogJoystick.h"
 #include <WebSocketsServer.h>
 #include "WifiConfig.h"
 

@@ -1,5 +1,3 @@
-#include "../../config.h"
-
 #include "SerialProcess.h"
 
 SerialProcess::SerialProcess(/* args */)
@@ -12,7 +10,6 @@ SerialProcess::~SerialProcess()
 
 void SerialProcess::loop()
 {
-	// Config::loop(); // make it sense to call this everyime?
 	if (Serial.available())
 	{
 		String s = Serial.readString();
@@ -83,104 +80,6 @@ void SerialProcess::jsonProcessor(String task, JsonObject jsonDocument)
 		}
 	}
 	/*
-	  Home Motors
-	*/
-	if (moduleController.get(AvailableModules::home) != nullptr)
-	{
-		if (task == home_act_endpoint)
-		{
-			serialize(moduleController.get(AvailableModules::home)->act(jsonDocument));
-		}
-		if (task == home_set_endpoint)
-		{
-			serialize(moduleController.get(AvailableModules::home)->set(jsonDocument));
-		}
-		if (task == home_get_endpoint)
-		{
-			serialize(moduleController.get(AvailableModules::home)->get(jsonDocument));
-		}
-	}
-
-	/*
-	  Operate SLM
-	*/
-
-	if (moduleController.get(AvailableModules::slm) != nullptr)
-	{
-		if (task == slm_act_endpoint)
-		{
-			serialize(moduleController.get(AvailableModules::slm)->act(jsonDocument));
-		}
-		if (task == slm_set_endpoint)
-		{
-			serialize(moduleController.get(AvailableModules::slm)->set(jsonDocument));
-		}
-		if (task == slm_get_endpoint)
-		{
-			serialize(moduleController.get(AvailableModules::slm)->get(jsonDocument));
-		}
-	}
-	/*
-	  Drive DAC
-	*/
-	if (moduleController.get(AvailableModules::dac) != nullptr)
-	{
-		if (task == dac_act_endpoint)
-			serialize(moduleController.get(AvailableModules::dac)->act(jsonDocument));
-		if (task == dac_set_endpoint)
-			serialize(moduleController.get(AvailableModules::dac)->set(jsonDocument));
-		if (task == dac_get_endpoint)
-			serialize(moduleController.get(AvailableModules::dac)->get(jsonDocument));
-	}
-	/*
-	  Drive Laser
-	*/
-	if (moduleController.get(AvailableModules::laser) != nullptr)
-	{
-		if (task == laser_act_endpoint)
-			serialize(moduleController.get(AvailableModules::laser)->act(jsonDocument));
-		if (task == laser_set_endpoint)
-			serialize(moduleController.get(AvailableModules::laser)->set(jsonDocument));
-		if (task == laser_get_endpoint)
-			serialize(moduleController.get(AvailableModules::laser)->get(jsonDocument));
-	}
-	/*
-	  Drive analogout
-	*/
-	if (moduleController.get(AvailableModules::analogout) != nullptr)
-	{
-		if (task == analogout_act_endpoint)
-			serialize(moduleController.get(AvailableModules::analogout)->act(jsonDocument));
-		if (task == analogout_set_endpoint)
-			serialize(moduleController.get(AvailableModules::analogout)->set(jsonDocument));
-		if (task == analogout_get_endpoint)
-			serialize(moduleController.get(AvailableModules::analogout)->get(jsonDocument));
-	}
-	/*
-	  Drive digitalout
-	*/
-	if (moduleController.get(AvailableModules::digitalout) != nullptr)
-	{
-		if (task == digitalout_act_endpoint)
-			serialize(moduleController.get(AvailableModules::digitalout)->act(jsonDocument));
-		if (task == digitalout_set_endpoint)
-			serialize(moduleController.get(AvailableModules::digitalout)->set(jsonDocument));
-		if (task == digitalout_get_endpoint)
-			serialize(moduleController.get(AvailableModules::digitalout)->get(jsonDocument));
-	}
-	/*
-	  Drive digitalin
-	*/
-	if (moduleController.get(AvailableModules::digitalin) != nullptr)
-	{
-		if (task == digitalin_act_endpoint)
-			serialize(moduleController.get(AvailableModules::digitalin)->act(jsonDocument));
-		if (task == digitalin_set_endpoint)
-			serialize(moduleController.get(AvailableModules::digitalin)->set(jsonDocument));
-		if (task == digitalin_get_endpoint)
-			serialize(moduleController.get(AvailableModules::digitalin)->get(jsonDocument));
-	}
-	/*
 	  Drive LED Matrix
 	*/
 	if (moduleController.get(AvailableModules::led) != nullptr)
@@ -191,32 +90,6 @@ void SerialProcess::jsonProcessor(String task, JsonObject jsonDocument)
 			serialize(moduleController.get(AvailableModules::led)->set(jsonDocument));
 		if (task == ledarr_get_endpoint)
 			serialize(moduleController.get(AvailableModules::led)->get(jsonDocument));
-	}
-
-	/*
-	  Read the analogin
-	*/
-	if (moduleController.get(AvailableModules::analogin) != nullptr)
-	{
-		if (task == readanalogin_act_endpoint)
-			serialize(moduleController.get(AvailableModules::analogin)->act(jsonDocument));
-		if (task == readanalogin_set_endpoint)
-			serialize(moduleController.get(AvailableModules::analogin)->set(jsonDocument));
-		if (task == readanalogin_get_endpoint)
-			serialize(moduleController.get(AvailableModules::analogin)->get(jsonDocument));
-	}
-
-	/*
-	  Control PID controller
-	*/
-	if (moduleController.get(AvailableModules::pid) != nullptr)
-	{
-		if (task == PID_act_endpoint)
-			serialize(moduleController.get(AvailableModules::pid)->act(jsonDocument));
-		if (task == PID_set_endpoint)
-			serialize(moduleController.get(AvailableModules::pid)->set(jsonDocument));
-		if (task == PID_get_endpoint)
-			serialize(moduleController.get(AvailableModules::pid)->get(jsonDocument));
 	}
 
 	if (moduleController.get(AvailableModules::analogJoystick) != nullptr)

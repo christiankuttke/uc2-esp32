@@ -1,4 +1,3 @@
-#include "../../config.h"
 #include "WifiController.h"
 
 namespace RestApi
@@ -289,54 +288,6 @@ namespace WifiController
 			server->on(motor_setcalibration_endpoint,HTTP_POST, RestApi::FocusMotor_setCalibration);
 		}
 
-		if (moduleController.moduleConfig->dac != 0)
-		{
-			log_i("add dac endpoints");
-			server->on(dac_act_endpoint, HTTP_POST, RestApi::Dac_act);
-			server->on(dac_get_endpoint, HTTP_POST, RestApi::Dac_get);
-			server->on(dac_set_endpoint, HTTP_POST, RestApi::Dac_set);
-		}
-
-		if (moduleController.moduleConfig->laser != 0)
-		{
-			log_i("add laser endpoints");
-			server->on(laser_set_endpoint, HTTP_POST, RestApi::Laser_set);
-			server->on(laser_get_endpoint, HTTP_GET, RestApi::Laser_get);
-			server->on(laser_act_endpoint, HTTP_POST, RestApi::Laser_act);
-		}
-
-		if (moduleController.moduleConfig->analogout != 0)
-		{
-			log_i("add analogout endpoints");
-			server->on(analogout_act_endpoint, HTTP_POST, RestApi::AnalogOut_act);
-			server->on(analogout_get_endpoint, HTTP_POST, RestApi::AnalogOut_get);
-			server->on(analogout_set_endpoint, HTTP_POST, RestApi::AnalogOut_set);
-		}
-
-		if (moduleController.moduleConfig->digitalout != 0)
-		{
-			log_i("add digitalout endpoints");
-			server->on(digitalout_act_endpoint, HTTP_POST, RestApi::DigitalOut_act);
-			server->on(digitalout_get_endpoint, HTTP_POST, RestApi::DigitalOut_get);
-			server->on(digitalout_set_endpoint, HTTP_POST, RestApi::DigitalOut_set);
-		}
-
-		if (moduleController.moduleConfig->digitalin != 0)
-		{
-			log_i("add digitalin endpoints");
-			server->on(digitalin_act_endpoint, HTTP_POST, RestApi::DigitalIn_act);
-			server->on(digitalin_get_endpoint, HTTP_POST, RestApi::DigitalIn_get);
-			server->on(digitalin_set_endpoint, HTTP_POST, RestApi::DigitalIn_set);
-		}
-
-		if (moduleController.moduleConfig->pid != 0)
-		{
-			log_i("add pid endpoints");
-			server->on(PID_act_endpoint, HTTP_POST, RestApi::Pid_act);
-			server->on(PID_get_endpoint, HTTP_POST, RestApi::Pid_get);
-			server->on(PID_set_endpoint, HTTP_POST, RestApi::Pid_set);
-		}
-
 		if (moduleController.moduleConfig->led != 0)
 		{
 			log_i("add led endpoints");
@@ -345,13 +296,6 @@ namespace WifiController
 			server->on(ledarr_set_endpoint, HTTP_POST, RestApi::Led_set);
 		}
 
-		if (moduleController.moduleConfig->slm != 0)
-		{
-			log_i("add slm endpoints");
-			server->on(slm_act_endpoint, HTTP_POST, RestApi::Slm_act);
-			server->on(slm_get_endpoint, HTTP_POST, RestApi::Slm_get);
-			server->on(slm_set_endpoint, HTTP_POST, RestApi::Slm_set);
-		}
 		if (moduleController.moduleConfig->analogJoystick != 0)
 		{
 			log_i("add analog joystick endpoints");

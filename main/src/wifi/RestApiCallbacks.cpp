@@ -102,53 +102,11 @@ namespace RestApi
         doc.add(scanwifi_endpoint);
         doc.add(connectwifi_endpoint);
 
-        if (moduleController.get(AvailableModules::laser) != nullptr)
-        {
-            doc.add(laser_act_endpoint);
-            doc.add(laser_set_endpoint);
-            doc.add(laser_get_endpoint);
-        }
         if (moduleController.get(AvailableModules::motor) != nullptr)
         {
             doc.add(motor_act_endpoint);
             doc.add(motor_set_endpoint);
             doc.add(motor_get_endpoint);
-        }
-        if (moduleController.get(AvailableModules::pid) != nullptr)
-        {
-            doc.add(PID_act_endpoint);
-            doc.add(PID_set_endpoint);
-            doc.add(PID_get_endpoint);
-        }
-        if (moduleController.get(AvailableModules::analogout) != nullptr)
-        {
-            doc.add(analogout_act_endpoint);
-            doc.add(analogout_set_endpoint);
-            doc.add(analogout_get_endpoint);
-        }
-        if (moduleController.get(AvailableModules::digitalout) != nullptr)
-        {
-            doc.add(digitalout_act_endpoint);
-            doc.add(digitalout_set_endpoint);
-            doc.add(digitalout_get_endpoint);
-        }
-        if (moduleController.get(AvailableModules::digitalin) != nullptr)
-        {
-            doc.add(digitalin_act_endpoint);
-            doc.add(digitalin_set_endpoint);
-            doc.add(digitalin_get_endpoint);
-        }
-        if (moduleController.get(AvailableModules::dac) != nullptr)
-        {
-            doc.add(dac_act_endpoint);
-            doc.add(dac_set_endpoint);
-            doc.add(dac_get_endpoint);
-        }
-        if (moduleController.get(AvailableModules::slm) != nullptr)
-        {
-            doc.add(slm_act_endpoint);
-            doc.add(slm_set_endpoint);
-            doc.add(slm_get_endpoint);
         }
         if (moduleController.get(AvailableModules::led) != nullptr)
         {
