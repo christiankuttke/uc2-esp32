@@ -2,7 +2,6 @@
 
 static const PROGMEM String motor_act_endpoint = "/motor_act";
 static const PROGMEM String motor_get_endpoint = "/motor_get";
-static const PROGMEM String motor_setcalibration_endpoint = "/motor_setcalibration";
 
 static const PROGMEM String ledarr_act_endpoint = "/ledarr_act";
 static const PROGMEM String ledarr_get_endpoint = "/ledarr_get";
@@ -20,7 +19,5 @@ static const PROGMEM String bt_remove_endpoint = "/bt_remove";
 static const PROGMEM String bt_paireddevices_endpoint = "/bt_paireddevices";
 
 static const PROGMEM String modules_get_endpoint = "/modules_get";
-static const PROGMEM String modules_set_endpoint = "/modules_set";
-static const PROGMEM String analog_joystick_set_endpoint = "/analog_joystick_set";
 static const PROGMEM String analog_joystick_get_endpoint = "/analog_joystick_get";
 

@@ -28,7 +28,7 @@ struct PinConfig
 
     //led control pin
     int LED_PIN = 0;
-    //count from the led strip
+    //led count from the strip
     int LED_COUNT = 0;
 
     //anlog joystick x pin

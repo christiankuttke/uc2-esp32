@@ -40,34 +40,10 @@ class FocusMotor : public Module
 public:
 	FocusMotor();
 	~FocusMotor();
-	bool DEBUG = false;
-
-// for stepper.h
-#define MOTOR_STEPS 200
-#define SLEEP 0
-#define MS1 0
-#define MS2 0
-#define MS3 0
-#define RPM 120
 
 	// global variables for the motor
-
-	int MOTOR_ACCEL = 5000;
-	int MOTOR_DECEL = 5000;
-
-	static const int FULLSTEPS_PER_REV_A = 200;
-	static const int FULLSTEPS_PER_REV_X = 200;
-	static const int FULLSTEPS_PER_REV_Y = 200;
-	static const int FULLSTEPS_PER_REV_Z = 200;
-
 	long MAX_VELOCITY_A = 20000;
-	long MAX_VELOCITY_X = 20000;
-	long MAX_VELOCITY_Y = 20000;
-	long MAX_VELOCITY_Z = 20000;
 	long MAX_ACCELERATION_A = 100000;
-	long MAX_ACCELERATION_X = 100000;
-	long MAX_ACCELERATION_Y = 100000;
-	long MAX_ACCELERATION_Z = 100000;
 
 	std::array<AccelStepper *, 4> steppers;
 	std::array<MotorData *, 4> data;

@@ -90,7 +90,8 @@ namespace WifiController
 		else if(type == WStype_TEXT)
 		{
 			log_i("[%u] get Text: %s\n", num, payload);
-			DynamicJsonDocument doc(4096);
+			int size = (int)payload * 8;
+			DynamicJsonDocument doc(size);
 			deserializeJson(doc, payload);
 			if (doc.containsKey(keyLed) && moduleController.get(AvailableModules::led) != nullptr)
 				moduleController.get(AvailableModules::led)->act(doc);

@@ -49,7 +49,6 @@ namespace WifiController
 
     void setup_routing();
     void handelMessages();
-    void createJsonDoc();
     void webSocketEvent(uint8_t num, WStype_t type, uint8_t *payload, size_t length);
     void sendJsonWebSocketMsg(DynamicJsonDocument doc);
     void begin();

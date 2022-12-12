@@ -3,17 +3,13 @@ Rest Api Endpoint Description
 
 | Endpoint                                  | Type | Socket|
 | ------------------------------------------| ---- | ----  |
-| [/modules_set](#modules_set)              | Post | false |
 | [/modules_get](#modules_get)              | Get  | false |
 |   |  |
 | [/ledarr_act](#ledarr_act)                | Post | true  |
 | [/ledarr_get](#ledarr_get)                | Get  | false |
-| [/ledarr_set](#ledarr_set)                | Post | false |
 |  |  |
 | [/motor_act](#motor_act)                  | Post | true  |
 | [/motor_get](#motor_get)                  | Get  | false |
-| [/motor_set](#motor_set)                  | Post | false |
-| [/motor_setcalibration](#motor_set)       | Post | false |
 |   |  |
 | [/wifi/scan](#wifiscan)                   | Get  | false |
 | [/wifi/connect](#wificonnect)             | Post | false |
@@ -23,31 +19,8 @@ Rest Api Endpoint Description
 | [/bt_remove](#bt_remove)                  | Post | false |
 | [/bt_paireddevices](#bt_paireddevices)    | Post | false |
 |   |  |
-| [/analog_joystick_set](#analog_joystick_set)    | Post | false |
 | [/analog_joystick_get](#analog_joystick_get)    | Post | false |
 
-
-/modules_set
-============
-POST
-```
-{
-    "modules" : 
-    {
-        "led" : 1,
-        "motor": 1, 
-        "slm" : 0, 
-        "sensor" : 0, 
-        "pid" : 0, 
-        "laser" : 0, 
-        "dac" : 0, 
-        "analog" : 0, 
-        "digitalout" : 0, 
-        "scanner" : 0
-    }
-
-}
-```
 
 /modules_get
 ============
@@ -105,18 +78,6 @@ GET
 }
 ```
 
-/ledarr_set
-===========
-POST
-```
-{ 
-    led: 
-    { 
-        ledArrPin: 27, 
-        ledArrNum: 64 
-    }
-} 
-```
 /motor_act
 ===========
 POST
@@ -190,72 +151,6 @@ GET
   ]
 }
 ```
-/motor_set
-==========
-POST
-```
-{
-    motor:
-    {
-        steppers: [
-            { stepperid: 0, step: 0, dir: 0, enable: 0, step_inverted: 0, dir_inverted: 0, enable_inverted: 0 },
-            { stepperid: 1, step: 0, dir: 0, enable: 0, step_inverted: 0, dir_inverted: 0, enable_inverted: 0 },
-            { stepperid: 2, step: 0, dir: 0, enable: 0, step_inverted: 0, dir_inverted: 0, enable_inverted: 0 },
-            { stepperid: 3, step: 0, dir: 0, enable: 0, step_inverted: 0, dir_inverted: 0, enable_inverted: 0 },
-        ]
-    }
-}
-```
-/motor_setcalibration
-==========
-POST
-set it like this to apply the current pos as min_pos. min pos gets defined as 0 position
-```
-{
-    motor:
-    {
-        steppers: [
-            { stepperid: id, min_pos: 0 }
-        ]
-    }
-}
-```
-set it like this to apply the current pos as max_pos. max pos should be a positiv value.
-```
-{
-    motor:
-    {
-        steppers: [
-            { stepperid: id, max_pos: 0 }
-        ]
-    }
-}
-```
-set min and max pos to reset it
-```
-{
-    motor:
-    {
-        steppers: [
-            { stepperid: id, max_pos: 0, min_pos:0 }
-        ]
-    }
-}
-```
-
-/home_act
-===========
-POST
-```
-{
-    home:
-    {
-        steppers: [
-            { "endpospin": 0, "timeout": 10000, "speed": 1000, "direction":1 }
-        ]
-    }
-}
-```
 
 /wifi/scan
 ===========
@@ -326,21 +221,6 @@ POST
 }
 ```
 
-
-/analog_joystick_set
-============
-POST
-```
-{
-    "joy" : 
-    {
-        "joyX" : 35,
-        "joyY": 34
-    }
-
-}
-```
-
 /analog_joystick_get
 ============
 GET
@@ -352,26 +232,6 @@ GET
         "joyY": 34
     }
 
-}
-```
-
-
-/digitalin_set
-==========
-POST
-```
-{
-    "digitalinid":1, 
-    "digitalinpin":39
-}
-```
-
-/digitalin_get
-==========
-POST
-```
-{
-    "digitalinid":1
 }
 ```
 

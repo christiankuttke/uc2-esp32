@@ -20,8 +20,6 @@ FocusMotor::~FocusMotor() { log_i("~ctor"); }
 
 int FocusMotor::act(DynamicJsonDocument doc)
 {
-	if (DEBUG)
-		Serial.println("motor_act_fct");
 	if (doc.containsKey(key_motor))
 	{
 		if (doc[key_motor].containsKey(key_steppers))
