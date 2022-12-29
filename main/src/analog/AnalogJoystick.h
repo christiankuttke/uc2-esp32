@@ -11,13 +11,16 @@ namespace RestApi
 };
 
 
+void processLoopAJoy(void *param);
 
 class AnalogJoystick : public Module
 {
 
     private:
-    bool joystick_drive_X = false;
-    bool joystick_drive_Y = false;
+    int joystick_drive_X = 0;
+    int joystick_drive_Y = 0;
+    int max_in_value = 4096;
+    int zeropoint = 350;
 
     public:
     AnalogJoystick();

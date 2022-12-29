@@ -32,7 +32,7 @@ function createWebsocket() {
                 $("#posx").html(curpos);
             if (id == 2)
                 $("#posy").html(curpos);
-            if (id == 2)
+            if (id == 3)
                 $("#posz").html(curpos);
         }
     });

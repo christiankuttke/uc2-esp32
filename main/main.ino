@@ -28,10 +28,12 @@ void setup()
 	log_i("wifi.setup");
 	WifiController::setup();
 
+
 	moduleController.setup();
 	BtController::setup();
 
 	WifiController::begin();
+	WifiController::createTasks();
 	log_i("End setup");
 }
 
@@ -39,7 +41,6 @@ void loop()
 {
 	// for any timing-related purposes
 	serial.loop();
-	WifiController::handelMessages();
-	BtController::loop();
+	//BtController::loop();
 	moduleController.loop();
 }

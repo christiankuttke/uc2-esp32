@@ -45,7 +45,7 @@ void ModuleController::loop()
 {
     for (auto &x : modules)
     {
-        if (x.second != nullptr)
+        if (x.second != nullptr && x.first != AvailableModules::motor && x.first != AvailableModules::analogJoystick)
         {
              x.second->loop();
         }

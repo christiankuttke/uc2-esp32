@@ -1,7 +1,7 @@
 #pragma once
 
 
-#include "PsController.h"
+#include "PSController.h"
 #include "../../ModuleController.h"
 
 static int8_t sgn(int val)
@@ -12,6 +12,7 @@ static int8_t sgn(int val)
 		return 0;
 	return 1;
 }
+
 
 class PsXController
 {

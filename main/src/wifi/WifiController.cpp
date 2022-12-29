@@ -25,12 +25,34 @@ namespace RestApi
 	}
 }
 
+void processWebSocketTask(void *p)
+{
+	for (;;)
+	{
+		if (WifiController::getSocket() != nullptr)
+			WifiController::getSocket()->loop();
+		vTaskDelay(5 / portTICK_PERIOD_MS);
+	}
+}
+
+void processHttpTask(void *p)
+{
+	for (;;)
+	{
+		if (WifiController::getServer() != nullptr)
+			WifiController::getServer()->handleClient();
+		vTaskDelay(5 / portTICK_PERIOD_MS);
+	}
+}
+
 namespace WifiController
 {
 
 	WebServer *server = nullptr;
 	WebSocketsServer *webSocket = nullptr;
 	WifiConfig *config;
+	TaskHandle_t httpTaskHandel;
+	TaskHandle_t socketTaskHandel;
 
 	String getSsid()
 	{
@@ -50,47 +72,51 @@ namespace WifiController
 		return server;
 	}
 
-	void handelMessages()
+	 WebSocketsServer * getSocket()
+	 {
+		return webSocket;
+	 }
+
+	void createTasks()
 	{
-		if (webSocket != nullptr)
-			webSocket->loop();
-		if (server != nullptr)
-			server->handleClient();
+		xTaskCreate(&processHttpTask, "http_task", 4096, NULL, 5, &httpTaskHandel);
+		xTaskCreate(&processWebSocketTask, "socket_task", 4096, NULL, 5, &socketTaskHandel);
 	}
 
 	DynamicJsonDocument connect(DynamicJsonDocument doc)
 	{
 		log_i("connectToWifi");
-		
+
 		bool ap = doc[keyWifiAP];
 		String ssid = doc[keyWifiSSID];
 		String pw = doc[keyWifiPW];
 		log_i("ssid: %s wifi:%s", ssid.c_str(), WifiController::getSsid().c_str());
 		log_i("pw: %s wifi:%s", pw.c_str(), WifiController::getPw().c_str());
-		log_i("ap: %s wifi:%s", ap, WifiController::getAp());
+		//log_i("ap: %s wifi:%s", ap, WifiController::getAp());
 		WifiController::setWifiConfig(ssid, pw, ap);
 		log_i("ssid json: %s wifi:%s", ssid, WifiController::getSsid());
 		log_i("pw json: %s wifi:%s", pw, WifiController::getPw());
-		log_i("ap json: %s wifi:%s", ap, WifiController::getAp());
+		//log_i("ap json: %s wifi:%s", ap, WifiController::getAp());
 		WifiController::setup();
 		WifiController::begin();
+		createTasks();
 		doc.clear();
 		return doc;
 	}
 
 	void webSocketEvent(uint8_t num, WStype_t type, uint8_t *payload, size_t length)
 	{
-		if(type == WStype_DISCONNECTED)
+		if (type == WStype_DISCONNECTED)
 			log_i("[%u] Disconnected!\n", num);
-		else if(type == WStype_CONNECTED)
+		else if (type == WStype_CONNECTED)
 		{
 			IPAddress ip = webSocket->remoteIP(num);
 			log_i("[%u] Connected from %d.%d.%d.%d url: %s\n", num, ip[0], ip[1], ip[2], ip[3], payload);
 		}
-		else if(type == WStype_TEXT)
+		else if (type == WStype_TEXT)
 		{
 			log_i("[%u] get Text: %s\n", num, payload);
-			int size = (int)payload * 8;
+			int size = 4096;
 			DynamicJsonDocument doc(size);
 			deserializeJson(doc, payload);
 			if (doc.containsKey(keyLed) && moduleController.get(AvailableModules::led) != nullptr)
@@ -102,7 +128,7 @@ namespace WifiController
 
 	void sendJsonWebSocketMsg(DynamicJsonDocument doc)
 	{
-		//log_i("socket broadcast");
+		// log_i("socket broadcast");
 		String s;
 		serializeJson(doc, s);
 		webSocket->broadcastTXT(s.c_str());
@@ -110,7 +136,7 @@ namespace WifiController
 
 	void setWifiConfig(String SSID, String PWD, bool ap)
 	{
-		log_i("mssid:%s pw:%s ap:%s", config->mSSID, config->mPWD, config->mAP);
+		//log_i("mssid:%s pw:%s ap:%s", config->mSSID, config->mPWD, config->mAP);
 		config->mSSID = SSID;
 		config->mPWD = PWD;
 		config->mAP = ap;
@@ -142,9 +168,11 @@ namespace WifiController
 
 	void setup()
 	{
+		if(socketTaskHandel != nullptr)
+			vTaskDelete(socketTaskHandel);
+		if(httpTaskHandel != nullptr)
+			vTaskDelete(httpTaskHandel);
 		config = Config::getWifiConfig();
-		if (config->mSSID != nullptr)
-			log_i("mssid:%s pw:%s ap:%s", config->mSSID, config->mPWD, config->mAP);
 		if (server != nullptr)
 			server->close();
 		if (webSocket != nullptr)
@@ -293,7 +321,7 @@ namespace WifiController
 			server->on(ledarr_get_endpoint, HTTP_GET, RestApi::Led_get);
 		}
 
-		if (pinConfig.ANLOG_JOYSTICK_X > 0 || pinConfig.ANLOG_JOYSTICK_Y >0)
+		if (pinConfig.ANLOG_JOYSTICK_X > 0 || pinConfig.ANLOG_JOYSTICK_Y > 0)
 		{
 			log_i("add analog joystick endpoints");
 			server->on(analog_joystick_get_endpoint, HTTP_POST, RestApi::AnalogJoystick_get);

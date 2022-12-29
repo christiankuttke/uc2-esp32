@@ -35,6 +35,9 @@ struct PinConfig
     int ANLOG_JOYSTICK_X = 0;
     //analog joystick y pin
     int ANLOG_JOYSTICK_Y = 0;
+
+    String PSX_MAC = "";
+    int PSX_CONTROLLER_TYPE = 0; //1 = ps3, 2 =ps4
 };
 
 struct XYZ_MOTOR_JOYSTICK : PinConfig
@@ -50,6 +53,9 @@ struct XYZ_MOTOR_JOYSTICK : PinConfig
 
     int ANLOG_JOYSTICK_X = 35;
     int ANLOG_JOYSTICK_Y = 34;
+
+    String PSX_MAC = "4c:63:71:cd:31:a0";
+    int PSX_CONTROLLER_TYPE = 2;
 };
 
 struct X_MOTOR_64LED : PinConfig

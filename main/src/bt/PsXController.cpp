@@ -62,6 +62,7 @@ void PsXController::loop()
 			{
 				motor->stopStepper(Stepper::Z);
 				joystick_drive_Z = false;
+				log_i("stop stepper z");
 			}
 
 			// X-Direction
@@ -84,6 +85,7 @@ void PsXController::loop()
 			{
 				motor->stopStepper(Stepper::X);
 				joystick_drive_X = false;
+				log_i("stop stepper x");
 			}
 
 			// Y-direction
@@ -105,6 +107,7 @@ void PsXController::loop()
 			{
 				motor->stopStepper(Stepper::Y);
 				joystick_drive_Y = false;
+				log_i("stop stepper y");
 			}
 		}
 	}

@@ -13,6 +13,11 @@ namespace RestApi
 	void FocusMotor_setCalibration();
 };
 
+
+void sendUpdateToClients(void *p);
+
+void processLoop(void *pvParameter);
+
 struct MotorData
 {
 	long speed = 0;
@@ -55,14 +60,13 @@ public:
 	void stopAllDrives();
 	void stopStepper(int i);
 	void startStepper(int i);
+	void sendMotorPos(int i, int arraypos);
 
 private:
 	int logcount;
-	unsigned long nextSocketUpdateTime;
 	bool power_enable = false;
 	
 	void startAllDrives();
-	void sendMotorPos(int i, int arraypos);
 	void disableEnablePin(int i);
 	void enableEnablePin(int i);
 };

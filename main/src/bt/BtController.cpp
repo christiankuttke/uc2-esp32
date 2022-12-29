@@ -42,6 +42,15 @@ namespace RestApi
     }
 }
 
+void btControllerLoop(void *p)
+{
+    for(;;)
+    {
+        BtController::loop();
+        vTaskDelay(5 / portTICK_PERIOD_MS);
+    }
+}
+
 namespace BtController
 {
 
@@ -63,10 +72,15 @@ namespace BtController
         //BLEDevice::setEncryptionLevel(ESP_BLE_SEC_ENCRYPT_MITM);
         String m = Config::getPsxMac();
         int type = Config::getPsxControllerType();
+        if(m.isEmpty() && !pinConfig.PSX_MAC.isEmpty()){
+            m = pinConfig.PSX_MAC;
+            type = pinConfig.PSX_CONTROLLER_TYPE;
+        }
         if (!m.isEmpty())
         {
             psx.setup(m,type);
         }
+        xTaskCreate(&btControllerLoop, "btController_task", 2048, NULL, 5, NULL);
         
     }
 

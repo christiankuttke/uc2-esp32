@@ -12,7 +12,33 @@ namespace RestApi
 	{
 		serialize(moduleController.get(AvailableModules::motor)->get(deserialize()));
 	}
+}
 
+
+void sendUpdateToClients(void * p)
+{
+	for (;;)
+	{
+		int arraypos = 0;
+		FocusMotor *motor = (FocusMotor *)moduleController.get(AvailableModules::motor);
+		for (int i = 0; i < motor->steppers.size(); i++)
+		{
+			if (!motor->data[i]->stopped)
+			{
+				motor->sendMotorPos(i, arraypos);
+			}
+		}
+		vTaskDelay(500 / portTICK_PERIOD_MS);
+	}
+}
+
+void processLoop(void *pvParameter)
+{
+	for (;;)
+	{
+		moduleController.get(AvailableModules::motor)->loop();
+		vTaskDelay(1 / portTICK_PERIOD_MS);
+	}
 }
 
 FocusMotor::FocusMotor() : Module() { log_i("ctor"); }
@@ -43,6 +69,7 @@ int FocusMotor::act(DynamicJsonDocument doc)
 				if (doc[key_motor][key_steppers][i].containsKey(key_isaccel))
 					data[s]->isaccelerated = doc[key_motor][key_steppers][i][key_isaccel];
 
+				log_i("data %i speed:%i forever:%i", s, data[s]->speed, data[s]->isforever);
 				if (doc[key_motor][key_steppers][i].containsKey(key_isstop))
 					stopStepper(s);
 				else
@@ -101,6 +128,8 @@ void FocusMotor::setup()
 		steppers[i]->setCurrentPosition(data[i]->currentPosition);
 	}
 	disableEnablePin(0);
+	xTaskCreate(&processLoop, "motor_task", 2048, NULL, 5, NULL);
+	xTaskCreate(&sendUpdateToClients, "motor_websocket_task", 2048, NULL, 5, NULL);
 }
 
 void FocusMotor::loop()
@@ -136,26 +165,12 @@ void FocusMotor::loop()
 					log_i("stop stepper:%i", i);
 					// if not turn it off
 					stopStepper(i);
-					sendMotorPos(i, arraypos);
 				}
 			}
+			data[i]->currentPosition = steppers[i]->currentPosition();
 		}
 
-		arraypos = 0;
-		if (millis() >= nextSocketUpdateTime)
-		{
-			for (int i = 0; i < steppers.size(); i++)
-			{
-				if (!data[i]->stopped)
-				{
-					data[i]->currentPosition = steppers[i]->currentPosition();
-					sendMotorPos(i, arraypos);
-				}
-			}
-			nextSocketUpdateTime = millis() + 500UL;
-		}
-
-		disableEnablePin(-1);
+		//disableEnablePin(-1);
 	}
 }
 
